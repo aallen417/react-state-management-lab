@@ -10,6 +10,8 @@ import { useState } from "react"
 
 
 const App = () => {
+  const [totalAgility, setTotalAgility] = useState(0)
+  const [totalStrength, setTotalStrength] = useState(0)
   const [team, setTeam] = useState([])
   const [money, setMoney] = useState(100)
   const [zombieFighters, setZombieFighters] = useState(
@@ -90,15 +92,28 @@ const App = () => {
   const handleAddFighter = fighter => {   
     if (money >= fighter.price) {
       setTeam ([...team, fighter])
-      setMoney(money - fighter.price)      
+      setMoney(money - fighter.price)
+      setTotalStrength(totalStrength + fighter.strength)
+      setTotalAgility(totalAgility + fighter.agility)
+
     } else{
       return console.log("Not enough money")      
     }     
   }
+
+  const handleRemoveFighter = fighter => {
+    setTeam (team.filter(el => el.name !== fighter.name))
+    setMoney(money + fighter.price)
+    setTotalStrength(totalStrength - fighter.strength)
+    setTotalAgility(totalAgility - fighter.agility)
+  }
+  
   
   return (
     <>
-      <h2>Money: {money}</h2>      
+      <h2>Money: {money}</h2>
+      <h2>Team agility: {totalAgility}</h2>
+      <h2>Team strength: {totalStrength}</h2>
       <h2>Team</h2>
       {team.length ?
       team.map((fighter, idx) => 
@@ -108,6 +123,7 @@ const App = () => {
           <li>{fighter.price}</li>
           <li>{fighter.strength}</li>
           <li>{fighter.agility}</li>
+          <button onClick={() => handleRemoveFighter(fighter)}>Remove</button>
         </ul>
       )
          : "Pick some team members"}
