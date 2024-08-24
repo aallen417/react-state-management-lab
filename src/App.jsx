@@ -92,6 +92,7 @@ const App = () => {
   const handleAddFighter = fighter => {   
     if (money >= fighter.price) {
       setTeam ([...team, fighter])
+      setZombieFighters(zombieFighters.filter(el => el.name !== fighter.name))
       setMoney(money - fighter.price)
       setTotalStrength(totalStrength + fighter.strength)
       setTotalAgility(totalAgility + fighter.agility)
@@ -103,6 +104,7 @@ const App = () => {
 
   const handleRemoveFighter = fighter => {
     setTeam (team.filter(el => el.name !== fighter.name))
+    setZombieFighters([...zombieFighters, fighter])
     setMoney(money + fighter.price)
     setTotalStrength(totalStrength - fighter.strength)
     setTotalAgility(totalAgility - fighter.agility)
@@ -111,34 +113,39 @@ const App = () => {
   
   return (
     <>
+      <h1>Zombie Fighters</h1>
       <h2>Money: {money}</h2>
       <h2>Team agility: {totalAgility}</h2>
       <h2>Team strength: {totalStrength}</h2>
       <h2>Team</h2>
+      <div className="fighters">
       {team.length ?
       team.map((fighter, idx) => 
         <ul key={idx}>
           <li><img src={fighter.img} alt="" /></li>
           <li>{fighter.name}</li>
-          <li>{fighter.price}</li>
-          <li>{fighter.strength}</li>
-          <li>{fighter.agility}</li>
+          <li>Price: {fighter.price}</li>
+          <li>Strenght: {fighter.strength}</li>
+          <li>Agility: {fighter.agility}</li>
           <button onClick={() => handleRemoveFighter(fighter)}>Remove</button>
         </ul>
       )
-         : "Pick some team members"}
+      : "Pick some team members"}
+      </div>
       <h2>Fighters</h2>
-      {zombieFighters.map((fighter, idx) => 
-        <ul key={idx}>
+      <div className="fighters">
+      {zombieFighters.map((fighter, idx) =>
+      <ul key={idx}>
           <li><img src={fighter.img} alt="" /></li>
           <li>{fighter.name}</li>
-          <li>{fighter.price}</li>
-          <li>{fighter.strength}</li>
-          <li>{fighter.agility}</li>
+          <li>Price: {fighter.price}</li>
+          <li>Strength: {fighter.strength}</li>
+          <li>Agility: {fighter.agility}</li>
                     
           <button onClick={() => handleAddFighter(fighter)}>Add</button>
         </ul>
       )}
+      </div>
     </>
   );
 }
